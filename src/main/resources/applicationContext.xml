@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--由spring来创建对象-->
+    <!--
+      bean:由Spring来创建对象，并负责管理对象
+      id：指的是获取对象的标识
+      class:管理哪个类的对象
+
+      constructor-arg:用于有参构造方法的配置
+      index:参数索引，从0开始，数据库索引也是
+      ref：引用另一个bean
+      name:参数名(字段名称)
+      value:赋值
+      type：参数类型(可分为基本数据类型和封装类 int和Integer)
+      使用这个标签可以精准的进行执行构造方法
+    -->
+    <!--1.有参构造方法注入bean对象-->
+    <bean id="people" class="com.gxw.pojo.People">
+        <constructor-arg name="id" value="1"/>
+        <constructor-arg name="username" value="张三"/>
+        <constructor-arg name="sex" value="男"/>
+    </bean>
+
+    <!--2.实例工厂方法注入bean对象-->
+    <!--
+      id:表示获取对象的识别
+      class:创建哪个类的对象
+      factory-bean:表示我们要创建工厂的对象
+      factory-method:表示我们创建对象的方法
+    -->
+    <bean id="peopleFactory" class="com.gxw.pojo.PeopleFactory"></bean>
+    <bean id="factory" factory-bean="peopleFactory" factory-method="newInstanceFactory"></bean>
+
+    <!--3.静态工厂方法注入bean对象，在方法上添加static-->
+    <!--
+      id:表示获取对象的识别
+      class:创建哪个类的对象
+      factory-method:表示我们创建对象的方法
+      创建静态工厂时，我们不需要创建工厂，只需要创建类的对象和方法即可
+    -->
+    <bean id="staticfactory" class="com.gxw.pojo.PeopleStaticFactory" factory-method="newInstanceStaticFactory"></bean>
+
+    <!--通过Set方法进行赋值注入-->
+    <bean id="people2" class="com.gxw.pojo.People">
+        <!--第一种方式-->
+        <!--<property name="id" value="101"/>-->
+        <!--<property name="username" value="王小二"/>-->
+        <!--<property name="sex" value="男"/>-->
+
+        <!--第二种方式-->
+        <property name="id">
+            <value>102</value>
+        </property>
+        <property name="username">
+            <value>王二妹</value>
+        </property>
+        <property name="sex">
+            <value>女</value>
+        </property>
+        <!--set集合-->
+        <property name="sets">
+            <set>
+                <value>1</value>
+                <value>2</value>
+                <value>3</value>
+                <value>4</value>
+            </set>
+        </property>
+        <!--list集合-->
+        <property name="lists">
+            <list>
+                <value>1</value>
+                <value>2</value>
+                <value>3</value>
+            </list>
+        </property>
+        <!--map集合-->
+        <property name="maps">
+            <map>
+                <entry key="1" value="王小一"></entry>
+                <entry key="2" value="王小二"></entry>
+                <entry key="3" value="王小三"></entry>
+            </map>
+        </property>
+        <!--属性是properties-->
+        <property name="demo">
+            <props>
+                <prop key="a">小a</prop>
+                <prop key="b">小b</prop>
+            </props>
+        </property>
+
+        <!--
+          依赖注入(DI)
+          ref：引用另一个类
+        -->
+        <property name="phone" ref="myphone"></property>
+    </bean>
+
+    <bean id="myphone" class="com.gxw.pojo.Phone">
+        <property name="id" value="001"></property>
+        <property name="name" value="苹果8"></property>
+        <property name="price" value="6800"></property>
+    </bean>
+</beans>
